@@ -4,7 +4,7 @@
 #%%
 import copy
 import numpy as np
-from sklearn.neighbors import DistanceMetric
+from sklearn.metrics import DistanceMetric
 #%%
 class Initmatch():
     def __init__(self, X, Y, penalty = 0):
@@ -39,7 +39,7 @@ class Initmatch():
         # statusXY1sum = np.sum(statusXY1, axis = 0)
         self.penalty = [x * penalty for x in statusXY1sum] # Value of penalty for each combination of X and Y
 
-        # Calculating V
+        # Calculating variance of each axis of template data (Y)
         self.YforV = [[np.prod(x) for x in zip(*rows)] for rows in zip(self.Y, statusXY12)]
         # self.YforV = np.prod(np.array(self.Y, statusXY12), axis = 0)
         npYforV = np.array(self.YforV)
@@ -51,7 +51,7 @@ class Initmatch():
         distpair = dist.pairwise(X = self.X, Y = self.Y) # Calculating distances of all the combinations of X data and Y data
         l = len(distpair)
         distdiag = [distpair[i][i] for i in range(l)] # Extracting diagonal elements in the 2D array of the distances
-        return [[np.sum(x) for x in zip(*rows)] for rows in zip(distdiag, self.penalty)]
+        return [np.sum(x) for x in zip(distdiag, self.penalty)]
         # return np.sum(np.array(distdiag, self.penalty), axis = 0)
 
 # class OrganInitmatch(Initmatch):
