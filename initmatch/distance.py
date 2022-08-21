@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # Naomichi Fujiuchi (naofujiuchi@gmail.com), August 2022
 # This is an original work by Fujiuchi (MIT license).
-#%%
 import copy
 import numpy as np
 from sklearn.metrics import DistanceMetric
-#%%
+
 class Initmatch():
+
     def __init__(self, X, Y, penalty = 0):
         """
         Parameters
