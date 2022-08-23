@@ -23,8 +23,8 @@ class Initmatch():
         #     self.Y = [[None if x != x else x for x in row] for row in self.Y]
         self.nrow = len(self.Y) # Number of template data
         self.X = [self.X for i in range(self.nrow)] # Making 2D array of test data by replicating the given 1D array test data
-        statusX = [[item != None for item in row] for row in self.X]
-        statusY = [[item != None for item in row] for row in self.Y]
+        statusX = [[item != np.nan for item in row] for row in self.X]
+        statusY = [[item != np.nan for item in row] for row in self.Y]
         statusXY = [[np.sum(x) for x in zip(*rows)] for rows in zip(statusX, statusY)] # 0: no data, 1: element lack, 2: both elements available
         # statusXY = np.sum(np.array(statusX, statusY), axis = 0)
         statusXY1 = [[item == 1 for item in row] for row in statusXY]
@@ -63,6 +63,6 @@ class Initmatch():
         sqXYdivV = [[np.divide(x,y) for x,y in zip(row, self.V)] for row in sqXY]
         sumsqXYdivV = [np.ma.masked_invalid(row).sum() for row in sqXYdivV]
         rtsumsqXYdivV = [x**(1/2) for x in sumsqXYdivV]
-        return(rtsumsqXYdivV)
+        return [np.sum(x) for x in zip(rtsumsqXYdivV, self.penalty)]
 
 # class OrganInitmatch(Initmatch):
