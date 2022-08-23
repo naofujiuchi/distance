@@ -52,11 +52,16 @@ class Initmatch():
         self.V = np.var(maskedYforV, axis=0)
 
     def distance(self):
-        dist = DistanceMetric.get_metric('seuclidean', V = self.V)
-        distpair = dist.pairwise(X = self.X, Y = self.Y) # Calculating distances of all the combinations of X data and Y data
-        l = len(distpair)
-        distdiag = [distpair[i][i] for i in range(l)] # Extracting diagonal elements in the 2D array of the distances
-        return [np.sum(x) for x in zip(distdiag, self.penalty)]
+        # dist = DistanceMetric.get_metric('seuclidean', V = self.V)
+        # distpair = dist.pairwise(X = self.X, Y = self.Y) # Calculating distances of all the combinations of X data and Y data
+        # l = len(distpair)
+        # distdiag = [distpair[i][i] for i in range(l)] # Extracting diagonal elements in the 2D array of the distances
+        # return [np.sum(x) for x in zip(distdiag, self.penalty)]
         # return np.sum(np.array(distdiag, self.penalty), axis = 0)
+        sqXY = [[(x-y)**2 for x,y in zip(*rows)] for rows in zip(self.X, self.Y)]
+        sqXYdivV = [[np.divide(x,y) for x,y in zip(row, self.V)] for row in sqXY]
+        sumsqXYdivV = [np.ma.masked_invalid(row).sum() for row in sqXYdivV]
+        rtsumsqXYdivV = [x**(1/2) for x in sumsqXYdivV]
+        return(rtsumsqXYdivV)
 
 # class OrganInitmatch(Initmatch):
