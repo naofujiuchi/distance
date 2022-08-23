@@ -32,8 +32,10 @@ class Initmatch():
         statusXY12 = [[item in [1,2] for item in row] for row in statusXY]
 
         # Keeping the values where the both elements are avilable. The other values are replaced with 0.
+        self.X = [[999999 if x == None else x for x in row] for row in self.X]
         self.X = [[np.prod(x) for x in zip(*rows)] for rows in zip(self.X, statusXY2)]
         # self.X = np.prod(np.array(self.X, statusXY2), axis = 0)
+        self.Y = [[999999 if x == None else x for x in row] for row in self.Y]
         self.Y = [[np.prod(x) for x in zip(*rows)] for rows in zip(self.Y, statusXY2)]
         # self.Y = np.prod(np.array(self.Y, statusXY2), axis = 0)
 
