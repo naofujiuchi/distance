@@ -7,7 +7,7 @@ from sklearn.metrics import DistanceMetric
 
 class Initmatch():
 
-    def __init__(self, X, Y, penalty = 0):
+    def __init__(self, X, Y, penalty = 0, isnan = False):
         """
         Parameters
         ----------
@@ -18,6 +18,9 @@ class Initmatch():
         """
         self.X = copy.deepcopy(X) # 1D array of test data
         self.Y = copy.deepcopy(Y) # 2D array of template data
+        if isnan == True: # Replace np.nan with None
+            self.X = [None if x != x else x for x in self.X]
+            self.Y = [[None if x != x else x for x in row] for row in self.Y]
         self.nrow = len(self.Y) # Number of template data
         self.X = [self.X for i in range(self.nrow)] # Making 2D array of test data by replicating the given 1D array test data
         statusX = [[item != None for item in row] for row in self.X]
