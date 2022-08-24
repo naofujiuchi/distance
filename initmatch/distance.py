@@ -3,7 +3,7 @@
 # This is an original work by Fujiuchi (MIT license).
 import copy
 import numpy as np
-from sklearn.metrics import DistanceMetric
+# from sklearn.metrics import DistanceMetric
 
 class Initmatch():
 
@@ -23,8 +23,8 @@ class Initmatch():
         #     self.Y = [[None if x != x else x for x in row] for row in self.Y]
         self.nrow = len(self.Y) # Number of template data
         self.X = [self.X for i in range(self.nrow)] # Making 2D array of test data by replicating the given 1D array test data
-        statusX = [[item != np.nan for item in row] for row in self.X]
-        statusY = [[item != np.nan for item in row] for row in self.Y]
+        statusX = [[not np.isnan(item) for item in row] for row in self.X]
+        statusY = [[not np.isnan(item) for item in row] for row in self.Y]
         statusXY = [[np.sum(x) for x in zip(*rows)] for rows in zip(statusX, statusY)] # 0: no data, 1: element lack, 2: both elements available
         # statusXY = np.sum(np.array(statusX, statusY), axis = 0)
         statusXY1 = [[item == 1 for item in row] for row in statusXY]
