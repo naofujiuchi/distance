@@ -1,2 +1,2 @@
-# initial-match
-Matching an initial data to the existing template data
+# distance
+Calculating a standardized euclidean distance between a single test data and multiple matching data.
