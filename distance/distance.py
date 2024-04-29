@@ -53,12 +53,17 @@ class Initmatch():
         self.V = [np.ma.masked_invalid(col).var() for col in zip(*self.Y)]
 
     def distance(self):
-        # dist = DistanceMetric.get_metric('seuclidean', V = self.V)
-        # distpair = dist.pairwise(X = self.X, Y = self.Y) # Calculating distances of all the combinations of X data and Y data
-        # l = len(distpair)
-        # distdiag = [distpair[i][i] for i in range(l)] # Extracting diagonal elements in the 2D array of the distances
-        # return [np.sum(x) for x in zip(distdiag, self.penalty)]
-        # return np.sum(np.array(distdiag, self.penalty), axis = 0)
+        # Standardized euclidean distance will be returned. 
+        # = sqrt(sum((x-y)^2 / V))
+        # e.g. x = [[0,1,2,3]], y = [[3,4,5,6],[6,7,8,9],[9,10,11,12]]. V of y is [6,6,6,6]. Standardized euclidean ditances between x and each y are 2.44948974, 4.89897949, 7.34846923
+        # This can be test as the following program.
+        # import numpy as np
+        # from sklearn.neighbors import DistanceMetric
+        # X = [[0,1,2,3]]
+        # Y = [[3,4,5,6],[6,7,8,9],[9,10,11,12]]
+        # V = [np.var(x) for x in zip(*Y)]
+        # dist = DistanceMetric.get_metric('seuclidean', V=V)
+        # dist.pairwise(X=X,Y=Y)
         sqXY = [[(x-y)**2 for x,y in zip(*rows)] for rows in zip(self.X, self.Y)]
         sqXYdivV = [[np.divide(x,y) for x,y in zip(row, self.V)] for row in sqXY]
         sumsqXYdivV = [np.ma.masked_invalid(row).sum() for row in sqXYdivV]
