@@ -51,6 +51,10 @@ class Initmatch():
         # maskedYforV = np.ma.masked_where(npYforV == 0, npYforV)
         # self.V = np.var(maskedYforV, axis=0)
         self.V = [np.ma.masked_invalid(col).var() for col in zip(*self.Y)]
+        
+        # Variance when X is set as a standard.
+        self.V_XY = [[(x-y)**2 for x,y in zip(*rows)] for rows in zip(self.X, self.Y)]
+        self.V_XY = [np.ma.masked_invalid(rows).mean() for rows in zip(*self.V_XY)]
 
     def distance(self):
         # Standardized euclidean distance will be returned. 
@@ -59,13 +63,20 @@ class Initmatch():
         # This can be test as the following program.
         # import numpy as np
         # from sklearn.neighbors import DistanceMetric
-        # X = [[0,1,2,3]]
-        # Y = [[3,4,5,6],[6,7,8,9],[9,10,11,12]]
+        # X = [[0,1,2,3], [0,1,2,3], [0,1,2,3]]
+        # Y = [[3,4,5,6], [6,7,8,9], [9,10,11,12]]
         # V = [np.var(x) for x in zip(*Y)]
         # dist = DistanceMetric.get_metric('seuclidean', V=V)
         # dist.pairwise(X=X,Y=Y)
         sqXY = [[(x-y)**2 for x,y in zip(*rows)] for rows in zip(self.X, self.Y)]
         sqXYdivV = [[np.divide(x,y) for x,y in zip(row, self.V)] for row in sqXY]
+        sumsqXYdivV = [np.ma.masked_invalid(row).sum() for row in sqXYdivV]
+        rtsumsqXYdivV = [x**(1/2) for x in sumsqXYdivV]
+        return [np.sum(x) for x in zip(rtsumsqXYdivV, self.penalty)]
+
+    def distanceXstandard(self):
+        sqXY = [[(x-y)**2 for x,y in zip(*rows)] for rows in zip(self.X, self.Y)]
+        sqXYdivV = [[np.divide(x,y) for x,y in zip(row, self.V_XY)] for row in sqXY]
         sumsqXYdivV = [np.ma.masked_invalid(row).sum() for row in sqXYdivV]
         rtsumsqXYdivV = [x**(1/2) for x in sumsqXYdivV]
         return [np.sum(x) for x in zip(rtsumsqXYdivV, self.penalty)]
